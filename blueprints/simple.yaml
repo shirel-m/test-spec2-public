@@ -1,4 +1,4 @@
-spec_version: 2-preview
+spec_version: 2
 
 description: description text blah blahhh
 
@@ -33,12 +33,11 @@ grains:
     spec:
       source:
         path: github.com/QualiNext/test-spec2-public.git//terraform/simple-tf-module
-      host:
-        cloud-account: aws
-        compute-service: eks
+      agent:
+        name: eks
       inputs:
         - test_input1: env-input-{{.inputs.input1}}
         - test_input2: env-id-{{sandboxId}}
-      ouputs:
+      outputs:
         - output1
         - output2
