@@ -11,7 +11,11 @@ inputs:
   input2:
     type: string
     display-style: normal
-    description: "environemnt input 2"    
+    description: "environemnt input 2"
+  radio_input:
+    type: string
+    style: radio
+    allowed-values: [a, b, c]
 
 
 outputs:
