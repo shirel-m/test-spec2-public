@@ -15,7 +15,6 @@ inputs:
   radio_input:
     type: string
     style: radio
-    allowed-values: [a, b, c]
 
 
 outputs:
