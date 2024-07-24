@@ -10,9 +10,6 @@ workflow:
     event: 
       - "Approval Request Approved"
   - type: cron
-    cron: '*/10 * * * *'
-    overridable: true
-  - type: cron
     cron: '*/15 * * * *'
     overridable: true
     
