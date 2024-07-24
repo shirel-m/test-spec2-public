@@ -38,8 +38,8 @@ grains:
     kind: terraform
     spec:
       source:
-        store: assets
-        path: terraform/hello_world
+        store: test-spec2-public-shirel
+        path: terraform/hello-world
       agent:        
         name: '{{.inputs.host_name}}'
         # A service account annotated with a role ARN with permissions to run the asset
