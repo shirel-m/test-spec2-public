@@ -6,9 +6,9 @@ workflow:
   scope: env
   triggers:
   - type: manual
-  - type: cron
-    cron: '*/15 * * * *'
-    overridable: true
+  # - type: cron
+  #   cron: '*/15 * * * *'
+  #   overridable: true
     
 inputs:
   my_name:
