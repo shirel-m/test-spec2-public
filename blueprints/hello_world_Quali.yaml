@@ -25,8 +25,7 @@ inputs:
     default: Test Doe message
   host_name:
     type: agent
-    default: eks-local-nonfs
-    display-style: normal
+    default: eks
     description: "execution host name"
 # blueprint outputs define which data that was generated during environment provisioning will be returned to the user, API or CI.
 outputs:
