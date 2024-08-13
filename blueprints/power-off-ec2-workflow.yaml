@@ -4,7 +4,7 @@ description: This workflow pauses an EKS cluster on-demand
 workflow:
   scope: env_resource
   labels-selector: power-off
-  resource-types: aws-instance
+  resource-types: aws_instance
   triggers:
     - type: manual
     - type: cron
