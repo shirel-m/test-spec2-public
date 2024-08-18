@@ -2,15 +2,16 @@ spec_version: 2
 
 description: description text blah blahhh
 
+instructions:
+  text: fsdfnsdkgjsdgkjsdgjd
+
 inputs:
   input1:
     type: string
-    display-style: normal
     default: "default1"
     description: "environemnt input 1"
   input2:
     type: string
-    display-style: normal
     description: "environemnt input 2"
   radio_input:
     type: string
