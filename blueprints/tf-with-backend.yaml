@@ -1,0 +1,33 @@
+spec_version: 2-preview
+
+inputs:
+  compute_service_name:
+    type: string
+    default: "eks-main"
+
+grains:
+  helloTF:
+    kind: terraform
+    spec:
+      backend:
+        type: s3
+        bucket: shirel-tf-backend-test
+        region: us-east-1
+      source:
+        path: terraform/simple-tf-module
+        store: test-spec2-public
+      authentication:
+        - s3_role
+      agent:
+        name: '{{.inputs.compute_service_name}}'
+      # scripts:
+      #   pre-tf-init:
+      #     source:
+      #       store: test-spec2-public
+      #       path : scripts/tomerv_user_script.sh
+      #     arguments: "value"
+      #   pre-tf-destroy:
+      #     source:
+      #       store: test-spec2-public
+      #       path : scripts/tomerv_user_script.sh
+      #     arguments: "value"
