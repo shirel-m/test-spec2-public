@@ -1,0 +1,31 @@
+spec_version: 2
+description: deploys new gcp compute engine
+
+inputs:
+  agent:
+    type: agent
+  instance_name:
+    type: string
+    default: "shirel-instance"
+  region:
+    type: string
+    default: "EUROPE-WEST1"
+  project:
+    type: string
+    default: "quali-playground"
+
+grains:
+  vm:
+    kind: terraform
+    spec:
+      source:
+        store: test-spec2-public
+        path: terraform/gcp-compute-engine
+      agent:
+        name: '{{ .inputs.agent }}'
+      inputs:
+        - instance_name: '{{.inputs.instance_name}}'
+        - region: '{{.inputs.region}}'
+        - project_id: '{{.inputs.project}}'
+      env-vars:
+        - GOOGLE_CREDENTIALS: '/etc/tls-certs/quali-playground-85b37d72ac17.json'
