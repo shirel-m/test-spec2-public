@@ -9,9 +9,10 @@ resource "google_compute_instance" "default" {
   zone         = var.zone
 
   scheduling {
+    preemptible         = true
     automatic_restart   = false
     on_host_maintenance = "TERMINATE"
-    provisioning_model = "SPOT"
+    provisioning_model  = "SPOT"
   }
 
   boot_disk {
