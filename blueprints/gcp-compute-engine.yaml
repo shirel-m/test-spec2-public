@@ -9,10 +9,13 @@ inputs:
     default: "shirel-instance"
   region:
     type: string
-    default: "EUROPE-WEST1"
+    default: "us-central1"
   project:
     type: string
     default: "quali-playground"
+  zone:
+    type: string
+    default: "us-central1-a"
 
 grains:
   vm:
@@ -27,5 +30,6 @@ grains:
         - instance_name: '{{.inputs.instance_name}}'
         - region: '{{.inputs.region}}'
         - project_id: '{{.inputs.project}}'
+        - zone: '{{.inputs.zone}}'
       env-vars:
         - GOOGLE_CREDENTIALS: '/etc/tls-certs/quali-playground-85b37d72ac17.json'
