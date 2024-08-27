@@ -8,6 +8,11 @@ variable "region" {
   type        = string
 }
 
+variable "zone" {
+  description = "The zone to deploy the instance in"
+  type        = string
+}
+
 variable "instance_name" {
   description = "The name of the Compute Engine instance"
   type        = string
