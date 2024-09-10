@@ -22,8 +22,7 @@ grains:
       source:
         store: test-spec2-public
         path: terraform/s3-write
-      host:
-        agent:
+      agent:
           name: '{{inputs.compute_service_name}}'
       inputs:
         - BUCKET_NAME: '{{.inputs.bucket_name}}'
