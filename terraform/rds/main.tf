@@ -34,7 +34,7 @@ resource "aws_default_vpc" "default" {
   }
 }
 
-data "aws_subnet_ids" "apps_subnets" {
+data "aws_subnets" "apps_subnets" {
   vpc_id = "${aws_default_vpc.default.id}"
   filter {
     name = "tag:Name"
