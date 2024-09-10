@@ -49,12 +49,7 @@ variable "allocated_storage" {
 }
 
 variable "size" {
-  description = "The instance type of the RDS instance. Small, medium, or large. Default: db.t2.medium (medium)"
-  default = "medium"
+  description = "The instance type of the RDS instance."
+  default = "db.t3.micro"
   type = string
-
-  validation {
-    condition = contains(["small", "medium", "large"], lower(var.size))
-    error_message = "Invalid database size. Options are: small, medium, or large."
-  }
 }
