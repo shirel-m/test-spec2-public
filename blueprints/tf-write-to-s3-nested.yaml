@@ -6,6 +6,9 @@ inputs:
     default: "default1"
     description: "environemnt input 1"
   bucket_name:
+  acl:
+    type: string
+    default: "private"
   agent:
     default: "eks"
 
@@ -37,6 +40,7 @@ grains:
         - bucket_name: '{{inputs.bucket_name}}'
         - compute_service_name: '{{inputs.agent}}'
         - content: 'output1 of simple: {{grains.simple.outputs.output1}}'
+        - acl: '{{.inputs.acl}}'
       outputs:
         - the_output
   

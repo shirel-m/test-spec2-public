@@ -5,15 +5,15 @@ description: write content to an existing s3 bucket
 inputs:
   bucket_name:
     type: string
-    display-style: normal
   content:
     type: string
-    default: this is a default content
-    display-style: normal
+  acl:
+    type: string
+    default: "private"
   compute_service_name:
     type: string
     default: "eks"
-    display-style: normal
+  
 
 grains:
   s3-write:
@@ -25,6 +25,6 @@ grains:
       agent:
           name: '{{inputs.compute_service_name}}'
       inputs:
-        - BUCKET_NAME: '{{.inputs.bucket_name}}'
-        - SANDBOX_ID: '{{sandboxId}}'
-        - CONTENT: '{{.inputs.content}}'
+        - bucket_name: '{{.inputs.bucket_name}}'
+        - content: '{{.inputs.content}}'
+        - acl: '{{.inputs.acl}}'

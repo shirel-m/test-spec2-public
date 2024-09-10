@@ -1,11 +1,17 @@
-variable "bucket_name" {}
-variable "object_key" {}
-variable "content" {}
+variable "bucket_name" {
+  description = "The name of the S3 bucket"
+  type        = string
+}
 
-variable "region" {
-    description = "Region where to create resources" 
-    type = string
-    default = "eu-west-1"
+variable "object_key" {
+  description = "The name (key) of the S3 object"
+  type        = string
+  default     = "file"
+}
+
+variable "content" {
+  description = "The content of the S3 object"
+  type        = string
 }
 
 variable "acl" {

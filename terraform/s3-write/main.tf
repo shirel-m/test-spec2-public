@@ -2,37 +2,14 @@ provider "aws" {
   region = "eu-west-1"
 }
 
-locals {
-  common_tags = {
-    creator        = "terraform"
-  }
-  
-  initiator = "probably torque"
-}
-
 resource "aws_s3_bucket" "bucket" {
   bucket = var.bucket_name
   acl    = var.acl
   force_destroy = true
-
-  tags = {
-    Name        = "My bucket"
-    Environment = "Dev"
-  }
 }
 
 resource "aws_s3_bucket_object" "object" {
-  bucket  = aws_s3_bucket.bucket.id
+  bucket  = aws_s3_bucket.bucket
   key     = "${var.object_key}.json"
-  #content = "{ \"Content\": \"${var.content}\"}"
-  content = <<EOF
-Content: ${var.content}
-EOF
-  
-  tags = merge(
-    local.common_tags,
-    {
-      "custom-tag-2" = local.initiator
-    }
-  )
+  content = var.content
 }
