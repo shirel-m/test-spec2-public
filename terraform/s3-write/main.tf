@@ -9,7 +9,7 @@ resource "aws_s3_bucket" "bucket" {
 }
 
 resource "aws_s3_bucket_object" "object" {
-  bucket  = aws_s3_bucket.bucket
+  bucket  = aws_s3_bucket.bucket.id
   key     = "${var.object_key}.json"
   content = var.content
 }
