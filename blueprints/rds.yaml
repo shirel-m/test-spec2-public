@@ -1,0 +1,49 @@
+spec_version: 2
+description: Torque auto generated blueprint
+# blueprint inputs can be provided by the user, API or CI plugin when creating an environment from this blueprint.
+inputs:
+  db_name:
+    type: string
+    description: db name
+  sandbox_id:
+    type: string
+    description: unique id
+  username:
+    type: string
+    description: User name
+  agent:
+    type: agent
+# blueprint outputs define which data that was generated during environment provisioning will be returned to the user, API or CI.
+outputs:
+  rds_connection_string:
+    value: '{{ .grains.rds.outputs.connection_string }}'
+    quick: true
+  rds_hostname:
+    value: '{{ .grains.rds.outputs.hostname }}'
+    quick: true
+grains:
+  rds:
+    kind: terraform
+    spec:
+      source:
+        store: test-spec2-public
+        path: terraform/rds
+      agent:
+      # The Torque agent that will be used to provision the environment.
+        name: '{{ .inputs.agent }}'
+        # A service account annotated with a role ARN with permissions to run the asset
+        # service-account: <service-account-name>
+        # Will override the default value for Runners isolation
+        # isolated: <boolean>
+      inputs:
+      - db_name: '{{ .inputs.db_name }}'
+      - sandbox_id: '{{ .inputs.sandbox_id }}'
+      - username: '{{ .inputs.username }}'
+      # The environment variables declared in this section will be available during the grain deployment as well as the grain destroy phase
+      # env-vars:
+      # - VAR_NAME: var value
+      env-vars: []
+      outputs:
+      - connection_string
+      - hostname
+      version: 1.5.5

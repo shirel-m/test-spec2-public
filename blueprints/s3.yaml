@@ -1,0 +1,42 @@
+spec_version: 2
+description: Torque auto generated blueprint
+# blueprint inputs can be provided by the user, API or CI plugin when creating an environment from this blueprint.
+inputs:
+  acl:
+    type: string
+    default: private
+    description: Canned ACL to apply to the bucket. Default is private.
+  name:
+    type: string
+    description: Name of S3 bucket
+  agent:
+    type: agent
+# blueprint outputs define which data that was generated during environment provisioning will be returned to the user, API or CI.
+outputs:
+  s3_s3_bucket_arn:
+    value: '{{ .grains.s3.outputs.s3_bucket_arn }}'
+    quick: true
+grains:
+  s3:
+    kind: terraform
+    spec:
+      source:
+        store: test-spec2-public
+        path: terraform/s3
+      agent:
+      # The Torque agent that will be used to provision the environment.
+        name: '{{ .inputs.agent }}'
+        # A service account annotated with a role ARN with permissions to run the asset
+        # service-account: <service-account-name>
+        # Will override the default value for Runners isolation
+        # isolated: <boolean>
+      inputs:
+      - name: '{{ .inputs.name }}'
+      - acl: '{{ .inputs.acl }}'
+      # The environment variables declared in this section will be available during the grain deployment as well as the grain destroy phase
+      # env-vars:
+      # - VAR_NAME: var value
+      env-vars: []
+      outputs:
+      - s3_bucket_arn
+      version: 1.5.5

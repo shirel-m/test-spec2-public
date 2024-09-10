@@ -10,12 +10,6 @@ inputs:
     type: string
     default: "default1"
     description: "environemnt input 1"
-  input2:
-    type: string
-    description: "environemnt input 2"
-  radio_input:
-    type: string
-    style: radio
 
 
 outputs:
