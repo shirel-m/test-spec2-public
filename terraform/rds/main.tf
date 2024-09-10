@@ -35,7 +35,10 @@ resource "aws_default_vpc" "default" {
 }
 
 data "aws_subnets" "apps_subnets" {
-  vpc_id = "${aws_default_vpc.default.id}"
+  filter {
+    name   = "vpc-id"
+    values = [aws_default_vpc.default.id]
+  }
   filter {
     name = "tag:Name"
     values = ["app-rds*"]
@@ -44,7 +47,7 @@ data "aws_subnets" "apps_subnets" {
 
 resource "aws_db_subnet_group" "rds" {
   name = "rds-${var.sandbox_id}-subnet-group"
-  subnet_ids = data.aws_subnet_ids.apps_subnets.ids
+  subnet_ids = data.aws_subnets.apps_subnets.ids
 
   tags = {
     Name = "RDS-subnet-group"
