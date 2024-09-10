@@ -28,8 +28,8 @@ variable "engine" {
 }
 
 variable "engine_version" {
-  description = "Version of RDS Engine. Default is 8.0.26"
-  default = "8.0.26"
+  description = "Version of RDS Engine. Default is 8.0.39"
+  default = "8.0.39"
 }
 variable "storage_type" {
   description = "One of standard (magnetic), gp2 (general purpose SSD), or io1 (provisioned IOPS SSD). Default is gp2"
