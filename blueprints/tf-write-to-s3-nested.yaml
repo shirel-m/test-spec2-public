@@ -1,0 +1,42 @@
+spec_version: 2
+
+inputs:
+  input1:
+    type: string
+    default: "default1"
+    description: "environemnt input 1"
+  bucket_name:
+  agent:
+    default: "eks"
+
+grains:
+  simple:
+    kind: blueprint
+    spec:
+      source:
+        store: test-spec2-public
+        path: blueprints
+      agent:
+        name: '{{inputs.agent}}'
+      inputs:
+        - input1: '{{inputs.input1}}'
+      outputs:
+        - output1
+        - output2
+  
+  tf-write-to-s3:
+    kind: blueprint
+    depends-on: simple-tf
+    spec:
+      source:
+        store: test-spec2-public
+        path: blueprints
+      agent:
+        name: '{{inputs.agent}}'
+      inputs:
+        - bucket_name: '{{inputs.bucket_name}}'
+        - compute_service_name: '{{inputs.agent}}'
+        - content: 'output1 of simple-tf: {{grains.simple-tf.outputs.output1}}'
+      outputs:
+        - the_output
+  
