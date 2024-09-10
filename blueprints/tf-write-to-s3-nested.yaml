@@ -26,7 +26,7 @@ grains:
   
   tf-write-to-s3:
     kind: blueprint
-    depends-on: simple-tf
+    depends-on: simple
     spec:
       source:
         store: test-spec2-public
@@ -36,7 +36,7 @@ grains:
       inputs:
         - bucket_name: '{{inputs.bucket_name}}'
         - compute_service_name: '{{inputs.agent}}'
-        - content: 'output1 of simple-tf: {{grains.simple-tf.outputs.output1}}'
+        - content: 'output1 of simple: {{grains.simple.outputs.output1}}'
       outputs:
         - the_output
   
