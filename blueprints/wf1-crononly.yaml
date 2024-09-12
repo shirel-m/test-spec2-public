@@ -18,12 +18,6 @@ inputs:
     type: agent
     description: "execution host name"
     
-# blueprint outputs define which data that was generated during environment provisioning will be returned to the user, API or CI.
-outputs:
-  message:
-    value: '{{ .grains.hello_world.outputs.message }}'
-  url:
-    value: '{{ .grains.hello_world.outputs.url }}'
 grains:
   hello_world:
     kind: terraform
