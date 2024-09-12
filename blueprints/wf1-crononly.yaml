@@ -1,0 +1,49 @@
+spec_version: 2
+description: manual blueprint for terraform module hello_world
+# blueprint inputs can be provided by the user, API or CI plugin when creating an environment from this blueprint.
+
+workflow: 
+  scope: global
+  triggers:
+  - type: manual
+    
+inputs:
+  my_name:
+    type: string
+    default: Test Doe
+  message:
+    type: string
+    default: Test Doe message
+  host_name:
+    type: agent
+    description: "execution host name"
+    
+# blueprint outputs define which data that was generated during environment provisioning will be returned to the user, API or CI.
+outputs:
+  message:
+    value: '{{ .grains.hello_world.outputs.message }}'
+  url:
+    value: '{{ .grains.hello_world.outputs.url }}'
+grains:
+  hello_world:
+    kind: terraform
+    spec:
+      source:
+        store: private-blueprints
+        path: terraform/hello_world
+      agent:        
+        name: '{{.inputs.host_name}}'
+        # A service account annotated with a role ARN with permissions to run the asset
+        # service-account: <service-account-name>
+      inputs:
+      - my_name: '{{ .inputs.my_name }}'
+      - message: '{{ .inputs.message }}'
+      # The environment variables declared in this section will be available during the grain deployment as well as the grain destroy phase
+      # env-vars:
+      # - VAR_NAME: var value
+      env-vars: []
+      outputs:
+      - message
+      - url
+    # The terraform version that will be used to deploy the module
+    tf-version: 1.2.7
