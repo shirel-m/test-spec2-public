@@ -29,21 +29,15 @@ grains:
     kind: terraform
     spec:
       source:
-        store: private-blueprints
-        path: terraform/hello_world
+        store: test-spec2-public
+        path: terraform/hello-world
       agent:        
         name: '{{.inputs.host_name}}'
         # A service account annotated with a role ARN with permissions to run the asset
         # service-account: <service-account-name>
-      inputs:
-      - my_name: '{{ .inputs.my_name }}'
-      - message: '{{ .inputs.message }}'
       # The environment variables declared in this section will be available during the grain deployment as well as the grain destroy phase
       # env-vars:
       # - VAR_NAME: var value
       env-vars: []
-      outputs:
-      - message
-      - url
     # The terraform version that will be used to deploy the module
     tf-version: 1.2.7
