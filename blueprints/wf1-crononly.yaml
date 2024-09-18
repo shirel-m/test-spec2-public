@@ -3,7 +3,7 @@ description: manual blueprint for terraform module hello_world
 # blueprint inputs can be provided by the user, API or CI plugin when creating an environment from this blueprint.
 
 workflow: 
-  scope: global
+  scope: space
   triggers:
   - type: manual
     
