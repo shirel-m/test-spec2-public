@@ -1,0 +1,202 @@
+spec_version: 2
+description: 'Provision DocumentDB (mongodb) with IAM application authentication and simple personal user authentication'
+inputs:
+  region:
+    type: 'string'
+    style: 'text'
+    depends_on: []
+    overrides: []
+    allowed-values:
+      - 'eu-central-1'
+    default: 'eu-central-1'
+    description: 'AWS Region for resource creation, default is eu-central-1.'
+  environment:
+    type: 'string'
+    style: 'text'
+    depends_on: []
+    overrides: []
+    allowed-values:
+      - 'dev-dev'
+      - 'dev'
+      - 'stg'
+      - 'pre'
+      - 'prd'
+    default: 'dev-dev'
+    description: 'Environment specific configuration, default is dev-dev.'
+  version:
+    type: 'string'
+    style: 'text'
+    depends_on: []
+    overrides: []
+    allowed-values:
+      - '4.0.0'
+      - '5.0.0'
+    default: '5.0.0'
+    description: 'Major version of rds instance, default is 5.0.0.'
+  size:
+    type: 'string'
+    style: 'text'
+    depends_on: []
+    overrides: []
+    allowed-values:
+      - 'small'
+      - 'medium'
+      - 'large'
+      - 'xlarge'
+      - 'small-mo'
+      - 'medium-mo'
+      - 'large-mo'
+      - 'xlarge-mo'
+    default: 'small'
+    description: 'allocated compute and memory size, each value has a corresponding instance class, varies by environment, default is small.'
+  backup_window:
+    type: 'string'
+    style: 'text'
+    depends_on: []
+    overrides: []
+    default: '23:30-01:00'
+    description: 'Time period of database full backup operation, icurrs high load, default is 23:30-01:00.'
+  maintenance_window:
+    type: 'string'
+    style: 'text'
+    depends_on: []
+    overrides: []
+    default: 'sat:02:00-sat:04:00'
+    description: 'Time period of maintenance operations, database may be offline, default is sat:02:00-sat:04:00.'
+  apply_immediately:
+    type: 'string'
+    style: 'text'
+    depends_on: []
+    overrides: []
+    allowed-values:
+      - 'true'
+      - 'false'
+    default: 'false'
+    description: 'Changes will be applied immediately or during the specified maintenance window, default is false.'
+  databases:
+    type: 'string'
+    style: 'text'
+    pattern: '^\[(\".*\",)*(\".*\")\]$'
+    validation_description: 'invalid or empty input. valid input format ["db_1","db_2","db_3"].'
+    depends_on: []
+    overrides: []
+    default: '[""]'
+    description: 'List of database catalogs, the user will be granted access to, must not be empty or empty list.'
+  username_code:
+    type: 'string'
+    style: 'text'
+    depends_on: []
+    overrides: []
+    description: 'user name suffix, persoanl users name will begin with a prefix in this format <BNHPGROUP_>, must not be empty.'
+  iam_role-app-user-rw:
+    type: 'string'
+    description: 'IAM role name.'
+  iam_role-app-user-r:
+    type: 'string'
+    description: 'IAM role name.'
+outputs:
+  db_identifier:
+    value: '{{ .grains.db-docdb.outputs.db_identifier }}'
+    quick: false
+  db_endpoint:
+    value: '{{ .grains.db-docdb.outputs.db_endpoint }}'
+    quick: false
+  db_reader_endpoint:
+    value: '{{ .grains.db-docdb.outputs.db_reader_endpoint }}'
+    quick: false
+  app-user-rw-secret:
+    quick: false
+    value: '{{ .grains.db-docdb-app-user-rw.outputs.secret }}'
+  app-user-r-secret:
+    quick: false
+    value: '{{ .grains.db-docdb-app-user-r.outputs.secret }}'
+  personal-user-password:
+    quick: false
+    value: '{{ .grains.db-docdb-personal-user-r.outputs.password }}'
+  personal-user-name:
+    quick: false
+    value: '{{ .grains.db-docdb-personal-user-r.outputs.username }}'
+grains:
+  db-docdb:
+    kind: 'blueprint'
+    spec:
+      source:
+        store: 'common-bps-rds'
+        path: 'blueprints/db-docdb.yaml'
+      inputs:
+        - region: '{{ .inputs.region }}'
+        - environment: '{{ .inputs.environment }}'
+        - version: '{{ .inputs.version }}'
+        - size: '{{ .inputs.size }}'
+        - backup_window: '{{ .inputs.backup_window }}'
+        - maintenance_window: '{{ .inputs.maintenance_window }}'
+        - apply_immediately: 'false'
+      outputs:
+        - 'db_region'
+        - 'db_identifier'
+        - 'db_arn'
+        - 'db_endpoint'
+        - 'db_reader_endpoint'
+        - 'db_class'
+        - 'db_version'
+        - 'db_edition'
+        - 'db_engine'
+        - 'db_engine_version'
+        - 'db_tags'
+  db-docdb-app-user-rw:
+    kind: 'blueprint'
+    spec:
+      source:
+        store: 'common-bps-rds'
+        path: 'blueprints/db-docdb-app-user.yaml'
+      inputs:
+        - region: '{{ .inputs.region }}'
+        - environment: '{{ .inputs.environment }}'
+        - iam_role: '{{ .inputs.iam_role-app-user-rw }}'
+        - rds: '{{ .grains.db-docdb.outputs.db_identifier }}'
+        - databases: '{{ .inputs.databases }}'
+        - role: 'readWrite'
+      outputs:
+        - 'db_connection_tring'
+        - 'database'
+        - 'username'
+        - 'secret'
+    depends-on: 'db-docdb'
+  db-docdb-app-user-r:
+    kind: 'blueprint'
+    spec:
+      source:
+        store: 'common-bps-rds'
+        path: 'blueprints/db-docdb-app-user.yaml'
+      inputs:
+        - region: '{{ .inputs.region }}'
+        - environment: '{{ .inputs.environment }}'
+        - iam_role: '{{ .inputs.iam_role-app-user-r }}'
+        - rds: '{{ .grains.db-docdb.outputs.db_identifier }}'
+        - databases: '{{ .inputs.databases }}'
+        - role: 'read'
+      outputs:
+        - 'db_connection_tring'
+        - 'database'
+        - 'username'
+        - 'secret'
+    depends-on: 'db-docdb'
+  db-docdb-personal-user-r:
+    kind: 'blueprint'
+    spec:
+      source:
+        store: 'common-bps-rds'
+        path: 'blueprints/db-docdb-personal-user.yaml'
+      inputs:
+        - region: '{{ .inputs.region }}'
+        - environment: '{{ .inputs.environment }}'
+        - rds: '{{ .grains.db-docdb.outputs.db_identifier }}'
+        - databases: '{{ .inputs.databases }}'
+        - username_code: '{{ .inputs.username_code }}'
+        - role: 'read'
+      outputs:
+        - 'db_connection_tring'
+        - 'database'
+        - 'username'
+        - 'password'
+    depends-on: 'db-docdb'
