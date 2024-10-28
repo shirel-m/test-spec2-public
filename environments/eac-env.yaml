@@ -20,7 +20,7 @@ grains:
     kind: terraform
     spec:
       source:
-        store: bps
+        store: test-spec2-public
         path: terraform/hello-world
       agent:
         name: '{{ .inputs.agent }}'
