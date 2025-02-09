@@ -17,11 +17,4 @@ resource "aws_s3_bucket_object" "object" {
   content = <<EOF
 Content: ${var.content}
 EOF
-  
-  tags = merge(
-    local.common_tags,
-    {
-      "custom-tag-2" = local.initiator
-    }
-  )
 }
