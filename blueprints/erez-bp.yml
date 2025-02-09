@@ -1,0 +1,190 @@
+spec_version: 2
+description: 'Provision DocumentDB User Databases with IAM application authentication and simple personal user authentication'
+inputs:
+  region:
+    type: 'string'
+    style: 'text'
+    depends_on: []
+    overrides: []
+    allowed-values:
+      - 'eu-central-1'
+    default: 'eu-central-1'
+    description: 'AWS Region for resource creation, default is eu-central-1.'
+  environment:
+    type: 'string'
+    style: 'text'
+    depends_on: []
+    overrides: []
+    allowed-values:
+      - 'dev-sb'
+      - 'dev'
+      - 'stg'
+      - 'pre'
+      - 'prd'
+    default: 'dev-sb'
+    description: 'Environment specific configuration, default is dev-sb.'
+  db-identifier:
+    type: 'string'
+    style: 'text'
+    depends_on: []
+    overrides: []
+    description: 'documentdb cluster identifier.'
+  databases:
+    type: 'string'
+    style: 'text'
+    pattern: '^\[(\"[^\s"]+\",)*(\"[^\s"]+\")\]$'
+    validation_description: 'invalid or empty input. valid input format ["db_1","db_2","db_3"].'
+    depends_on: []
+    overrides: []
+    default: '["db_1","db_2","db_3"]'
+    description: 'List of database catalogs, the user will be granted access to, must not be empty or empty list.'
+  project-maintenance-admins:
+    type: 'string'
+    style: 'text'
+    pattern: '^\[(\"[^\s"]+\",)*(\"[^\s"]+\")\]$'
+    validation_description: 'invalid or empty input. valid input format ["uid_1","uid_2","uid_3"].'
+    depends_on: []
+    overrides: []
+    default: '["uid_1","uid_2","uid_3"]'
+    description: "List of personal user codes who require access for database maintenance and/or problem solving tasks, must not be empty or empty list."
+  iam-role-app-user-rw:
+    type: 'string'
+    default: ''
+    description: 'IAM role name.'
+  iam-role-app-user-r:
+    type: 'string'
+    default: ''
+    description: 'IAM role name.'
+  simple-authentication:
+    allowed-values: [true, false]
+    type: string
+    default: "false"
+    description: "Additional users with password authentication mechanism, default is false."
+
+outputs:
+  app-user-rw-secret:
+    quick: false
+    value: '{{ .grains.db-docdb-app-user-rw.outputs.secret }}'
+  app-user-r-secret:
+    quick: false
+    value: '{{ .grains.db-docdb-app-user-r.outputs.secret }}'
+  app-user-simple-rw-secret:
+    quick: false
+    value: '{{ .grains.db-docdb-app-user-simple-rw.outputs.secret }}'
+  app-user-simple-r-secret:
+    quick: false
+    value: '{{ .grains.db-docdb-app-user-simple-r.outputs.secret }}'
+  personal-users:
+    quick: false
+    value: '{{ .grains.db-docdb-personal-users.outputs.users }}'
+
+grains:
+  db-docdb-app-user-rw:
+    kind: 'blueprint'
+    spec:
+      source:
+        store: 'common-bps'
+        path: 'database/db-docdb-app-user.yaml'
+      inputs:
+        - region: '{{ .inputs.region }}'
+        - environment: '{{ .inputs.environment }}'
+        - iam_role: '{{ .inputs.iam-role-app-user-rw }}'
+        - dbInstanceIdentifier: '{{ .inputs.db-identifier }}'
+        - databases: '{{ .inputs.databases }}'
+        - role: 'readWrite'
+      outputs:
+        - 'db_connection_tring'
+        - 'database'
+        - 'username'
+        - 'secret'
+
+  db-docdb-app-user-r:
+    kind: 'blueprint'
+    spec:
+      source:
+        store: 'common-bps'
+        path: 'database/db-docdb-app-user.yaml'
+      inputs:
+        - region: '{{ .inputs.region }}'
+        - environment: '{{ .inputs.environment }}'
+        - iam_role: '{{ .inputs.iam-role-app-user-r }}'
+        - dbInstanceIdentifier: '{{ .inputs.db-identifier }}'
+        - databases: '{{ .inputs.databases }}'
+        - role: 'read'
+      outputs:
+        - 'db_connection_tring'
+        - 'database'
+        - 'username'
+        - 'secret'
+
+  db-docdb-app-user-rw-automtion:
+    kind: 'blueprint'
+    spec:
+      source:
+        store: 'common-bps'
+        path: 'database/db-docdb-app-user-automation.yaml'
+      inputs:
+        - region: '{{ .inputs.region }}'
+        - environment: '{{ .inputs.environment }}'
+        - dbInstanceIdentifier: '{{ .inputs.db-identifier }}'
+        - databases: '{{ .inputs.databases }}'
+      outputs:
+        - 'db_connection_tring'
+        - 'database'
+        - 'username'
+        - 'secret'
+        
+  db-docdb-app-user-simple-rw:
+    kind: 'blueprint'
+    spec:
+      source:
+        store: 'common-bps'
+        path: 'database/db-docdb-app-user-simple.yaml'
+      inputs:
+        - region: '{{ .inputs.region }}'
+        - environment: '{{ .inputs.environment }}'
+        - dbInstanceIdentifier: '{{ .inputs.db-identifier }}'
+        - databases: '{{ .inputs.databases }}'
+        - username: '{{ .inputs.simple-authentication }}'
+        - role: 'readWrite'
+      outputs:
+        - 'db_connection_tring'
+        - 'database'
+        - 'username'
+        - 'secret'
+  
+  db-docdb-app-user-simple-r:
+    kind: 'blueprint'
+    spec:
+      source:
+        store: 'common-bps'
+        path: 'database/db-docdb-app-user-simple.yaml'
+      inputs:
+        - region: '{{ .inputs.region }}'
+        - environment: '{{ .inputs.environment }}'
+        - dbInstanceIdentifier: '{{ .inputs.db-identifier }}'
+        - databases: '{{ .inputs.databases }}'
+        - username: '{{ .inputs.simple-authentication }}'
+        - role: 'read'
+      outputs:
+        - 'db_connection_tring'
+        - 'database'
+        - 'username'
+        - 'secret'
+
+  db-docdb-personal-users:
+    kind: 'blueprint'
+    spec:
+      source:
+        store: 'common-bps'
+        path: 'database/db-docdb-personal-users.yaml'
+      inputs:
+        - region: '{{ .inputs.region }}'
+        - environment: '{{ .inputs.environment }}'
+        - dbInstanceIdentifier: '{{ .inputs.db-identifier }}'
+        - databases: '{{ .inputs.databases }}'
+        - users: '{{ .inputs.project-maintenance-admins }}'
+      outputs:
+        - 'db_connection_tring'
+        - 'database'
+        - 'users'

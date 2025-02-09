@@ -3,6 +3,8 @@ spec_version: 2-preview
 inputs:
   compute_service_name:
     type: agent
+  test_input2:
+    type: string
 
 outputs:
   output1:
@@ -32,7 +34,7 @@ grains:
       agent:        
         name: '{{.inputs.compute_service_name}}'
       inputs:
-        - test_input2: "input2"
+        - test_input2: "{{.inputs.test_input2}}"
       # tfvars-files:
       #   - source:
       #       store: test-spec2-public

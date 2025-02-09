@@ -1,0 +1,90 @@
+spec_version: 2
+description: 'blah blah blah'
+inputs:
+  test_input2:
+    type: string
+  compute_service_name:
+    type: agent
+
+outputs:
+  app-user-rw-secret:
+    quick: false
+    value: '{{ .grains.simple-tf-yakir-1.outputs.output4 }}'
+  app-user-r-secret:
+    quick: false
+    value: '{{ .grains.simple-tf-yakir-2.outputs.output4 }}'
+
+grains:
+  simple-tf-yakir-1:
+    kind: 'blueprint'
+    spec:
+      source:
+        store: 'test-spec2-public'
+        path: 'blueprints/simple-tf-yakir.yaml'
+      inputs:
+        - test_input2: '{{ .inputs.test_input2 }}'
+        - compute_service_name: '{{inputs.compute_service_name}}'
+      outputs:
+        - 'output1'
+        - 'output2'
+        - 'output3'
+        - 'output4'
+
+  simple-tf-yakir-2:
+    kind: 'blueprint'
+    spec:
+      source:
+        store: 'test-spec2-public'
+        path: 'blueprints/simple-tf-yakir.yaml'
+      inputs:
+        - test_input2: '{{ .inputs.test_input2 }}'
+        - compute_service_name: '{{inputs.compute_service_name}}'
+      outputs:
+        - 'output1'
+        - 'output2'
+        - 'output3'
+        - 'output4'
+
+  ansible-hello-world:
+    kind: 'blueprint'
+    spec:
+      source:
+        store: 'test-spec2-public'
+        path: 'blueprints/ansible-hello-world.yaml'
+      inputs:
+        - agent: '{{inputs.compute_service_name}}'
+        - name: 'shirel'
+
+  deploy-s3-one-bucket-1:
+    kind: 'blueprint'
+    spec:
+      source:
+        store: 'test-spec2-public'
+        path: 'blueprints/deploy-s3-one-bucket.yaml'
+      inputs:
+        - bucket_name_prefix: 'my-bucket-1'
+        - compute_service_name: '{{inputs.compute_service_name}}'
+      outputs:
+        - 'bucket_1'
+  
+  deploy-s3-one-bucket-2:
+    kind: 'blueprint'
+    spec:
+      source:
+        store: 'test-spec2-public'
+        path: 'blueprints/deploy-s3-one-bucket.yaml'
+      inputs:
+        - bucket_name_prefix: 'my-bucket-2'
+        - compute_service_name: '{{inputs.compute_service_name}}'
+      outputs:
+        - 'bucket_1'
+
+  tf-write-to-s3:
+    kind: 'blueprint'
+    spec:
+      source:
+        store: 'test-spec2-public'
+        path: 'blueprints/tf-write-to-s3.yaml'
+      inputs:
+        - bucket_name: 'my-bucket-1-{{ sandboxid | downcase }}'
+        - compute_service_name: '{{inputs.compute_service_name}}'
