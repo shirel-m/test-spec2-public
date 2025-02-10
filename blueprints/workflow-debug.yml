@@ -1,0 +1,31 @@
+spec_version: 2
+description: manual blueprint for terraform module hello_world
+
+inputs:
+  agent:
+    type: agent
+
+workflow:
+  scope: env
+  labels-selector: dbs
+  triggers:
+    - type: manual
+
+grains:
+  do-something:
+    kind: shell
+    env-labels:
+      on-success:
+        - test: 'passed'
+        # - test: '{{ .inputs.label-value }}'
+      on-failure:
+        - test: 'failed'
+    spec:
+      agent:
+        name: '{{ .inputs.agent }}'
+      activities:
+        deploy:
+          commands:
+            - "echo hello_world"
+
+  shell:
