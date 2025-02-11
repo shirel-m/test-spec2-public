@@ -12,8 +12,8 @@ outputs:
     value: '{{.grains.MyCdk.outputs.myFunctionUrlOutput}}'
   env_var_output:
     value: '{{.grains.MyCdk.outputs.envVarOutput}}'
-#  region_output:
-#    value: '{{.grains.MyCdk.outputs.regionOutput}}'
+  region_output:
+    value: '{{.grains.MyCdk.outputs.regionOutput}}'
 
 grains:
   MyCdk  :
@@ -27,10 +27,10 @@ grains:
       outputs:
         - myFunctionUrlOutput
         - envVarOutput
-#        - regionOutput
+        - regionOutput
       env-vars:
         - MY_ENV_VAR: 'he'
- #     - REGION: '{{.inputs.region}}'
+        - REGION: '{{.inputs.region}}'
       workspace-directories:
         - source:
             name: MY_CONFIG_REPO
