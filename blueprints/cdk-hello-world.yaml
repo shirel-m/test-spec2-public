@@ -3,13 +3,17 @@ description: description text
 
 inputs:
   agent_name:
-    type: agent 
+    type: agent
+  region:
+    type: string
 
 outputs:
   function_url:
     value: '{{.grains.MyCdk.outputs.myFunctionUrlOutput}}'
   env_var_output:
     value: '{{.grains.MyCdk.outputs.envVarOutput}}'
+  region_output:
+    value: '{{.grains.MyCdk.outputs.regionOutput}}'
 
 grains:
   MyCdk  :
@@ -23,8 +27,10 @@ grains:
       outputs:
         - myFunctionUrlOutput
         - envVarOutput
+        - regionOutput
       env-vars:
         - MY_ENV_VAR: 'he'
+        - REGION: '{{.inputs.region}}'
       workspace-directories:
         - source:
             name: MY_CONFIG_REPO
