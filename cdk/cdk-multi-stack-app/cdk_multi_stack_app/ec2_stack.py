@@ -9,7 +9,7 @@ class Ec2Stack(Stack):
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        vpc_name = self.node.try_get_context("vpcname")
+        vpc_name = self.node.try_get_context("vpc_name")
         # Create a VPC
         vpc = ec2.Vpc(self, vpc_name, max_azs=2)
 

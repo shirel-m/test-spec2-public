@@ -3,7 +3,10 @@ description: description text
 
 inputs:
   agent_name:
-    type: agent 
+    type: agent
+  vpc_name:
+    type: string
+    default: "my_vpc"
 
 outputs:
   instance_id:
@@ -18,6 +21,9 @@ grains:
         store: test-spec2-public
       agent:
         name: '{{.inputs.agent_name}}'
+      inputs:
+        - stack_id: '{{sandboxId}}'
+        - vpc_name: '{{.inputs.vpc_name}}'
       outputs:
         - InstanceId
       scripts: 
