@@ -1,0 +1,31 @@
+spec_version: 2
+description: Torque auto generated blueprint
+# inputs can be provided by the user, API or CI plugin when creating an environment.
+inputs:
+  vpcname:
+    type: string
+    default: shirel-vpc
+  agent:
+    type: agent
+# outputs define which data that was generated during environment provisioning will be returned to the user, API or CI.
+outputs: {}
+grains:
+  hello-cdk-python:
+    kind: aws-cdk
+    spec:
+      source:
+        store: test-spec2-public
+        path: cdk/hello-cdk-python
+      agent:
+      # The Torque agent that will be used to provision the environment.
+        name: '{{ .inputs.agent }}'
+        # A service account annotated with a role ARN with permissions to run the asset
+        # service-account: <service-account-name>
+        # Will override the default value for Runners isolation
+        # isolated: <boolean>
+      inputs:
+      - vpcname: '{{ .inputs.vpcname }}'
+      # The environment variables declared in this section will be available during the grain deployment as well as the grain destroy phase
+      # env-vars:
+      # - VAR_NAME: var value
+      env-vars: []
