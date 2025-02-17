@@ -9,4 +9,4 @@ class S3Stack(Stack):
         super().__init__(scope, id, **kwargs)
 
         # Create an S3 bucket
-        bucket = s3.Bucket(self, "MyBucket")
+        bucket = s3.Bucket(self, "MyBucket-2")
