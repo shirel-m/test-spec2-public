@@ -28,23 +28,10 @@ grains:
         - myFunctionUrlOutput
         - envVarOutput
         - regionOutput
-      env-vars:
-        - MY_ENV_VAR: 'he'
-        - REGION: '{{.inputs.region}}'
-      workspace-directories:
-        - source:
-            name: MY_CONFIG_REPO
-            store: test
       scripts:
         pre-aws-cdk-deploy:
           source:
             store: test-spec2-public
-            path : scripts/tomerv_user_script.sh
-          arguments: "value"
-        post-aws-cdk-deploy:
-          source:
-            store: test-spec2-public
-            path : scripts/tomerv_user_script.sh
-          arguments: "value" 
+            path : scripts/install-cdk.sh
       
 
