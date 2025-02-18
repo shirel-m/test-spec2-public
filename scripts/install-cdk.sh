@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the CDK version you want to install
-CDK_VERSION="2.179.0"  # Change this to your desired version
+CDK_VERSION="2.174.0"  # Change this to your desired version
 
 echo "Installing AWS CDK version $CDK_VERSION..."
 
