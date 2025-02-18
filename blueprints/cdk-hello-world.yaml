@@ -10,10 +10,6 @@ inputs:
 outputs:
   function_url:
     value: '{{.grains.MyCdk.outputs.myFunctionUrlOutput}}'
-  env_var_output:
-    value: '{{.grains.MyCdk.outputs.envVarOutput}}'
-  region_output:
-    value: '{{.grains.MyCdk.outputs.regionOutput}}'
 
 grains:
   MyCdk  :
@@ -26,8 +22,6 @@ grains:
         name: '{{.inputs.agent_name}}'
       outputs:
         - myFunctionUrlOutput
-        - envVarOutput
-        - regionOutput
       scripts:
         pre-aws-cdk-deploy:
           source:
