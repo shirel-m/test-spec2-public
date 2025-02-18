@@ -37,14 +37,14 @@ class HelloCdkPythonStack(Stack):
         CfnOutput(self, "myFunctionUrlOutput", value=my_function_url.url)
         #CfnOutput(self, "envVarOutput", value=os.environ["MY_ENV_VAR"])
         #CfnOutput(self, "regionOutput", value=os.environ["REGION"])
-        x = self.node.try_get_context("x")
-        print("input type: " + str(type(x)) + " input: " + str(x))
-
-        y = self.node.try_get_context("y")
-        print("input type: " + str(type(y)) + " input: " + str(y))
-
-        z = self.node.try_get_context("z")
-        print("input type: " + str(type(z)) + " input: " + str(z))
-
-        isBool = self.node.try_get_context("isBool")
-        print("input type: " + str(type(isBool)) + " input: " + str(isBool))
+        # x = self.node.try_get_context("x")
+        # print("input type: " + str(type(x)) + " input: " + str(x))
+        #
+        # y = self.node.try_get_context("y")
+        # print("input type: " + str(type(y)) + " input: " + str(y))
+        #
+        # z = self.node.try_get_context("z")
+        # print("input type: " + str(type(z)) + " input: " + str(z))
+        #
+        # isBool = self.node.try_get_context("isBool")
+        # print("input type: " + str(type(isBool)) + " input: " + str(isBool))
