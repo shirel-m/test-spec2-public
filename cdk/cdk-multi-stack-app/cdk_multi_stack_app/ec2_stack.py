@@ -11,7 +11,7 @@ class Ec2Stack(Stack):
 
         dev = self.node.try_get_context("dev")
         # Create a VPC
-        vpc = ec2.Vpc(self, dev.vpc_name, max_azs=2)
+        vpc = ec2.Vpc(self, dev["vpc_name"], max_azs=2)
 
         # Create a key pair
         key_pair = ec2.CfnKeyPair(self, "MyKeyPair", key_name="my-key-pair")
