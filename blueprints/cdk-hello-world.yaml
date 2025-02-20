@@ -22,10 +22,5 @@ grains:
         name: '{{.inputs.agent_name}}'
       outputs:
         - myFunctionUrlOutput
-      scripts:
-        pre-aws-cdk-deploy:
-          source:
-            store: test-spec2-public
-            path : scripts/install-cdk.sh
       
 

@@ -22,20 +22,8 @@ grains:
       agent:
         name: '{{.inputs.agent_name}}'
       inputs:
-        - stack_id: '{{sandboxId}}'
-        - vpc_name: '{{.inputs.vpc_name}}'
+        - dev: '{"stack_id": {{sandobxId}}, "vpc_name": {{.inputs.vpc_name}}}'
       outputs:
         - InstanceId
-      scripts: 
-        pre-aws-cdk-deploy:
-          source:
-            store: test-spec2-public
-            path : scripts/tomerv_user_script.sh
-          arguments: "value"
-        post-aws-cdk-deploy:
-          source:
-            store: test-spec2-public
-            path : scripts/tomerv_user_script.sh
-          arguments: "value" 
           
 

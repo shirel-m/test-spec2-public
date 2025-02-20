@@ -5,11 +5,12 @@ import aws_cdk as cdk
 
 app = App()
 
-stack_id = app.node.try_get_context("stack_id")
+config = app.node.try_get_context("dev")
+
 # Create the EC2 stack
-ec2_stack = Ec2Stack(app, "Ec2Stack-" + stack_id, env=cdk.Environment(account='046086677675', region='eu-west-1'))
+ec2_stack = Ec2Stack(app, "Ec2Stack-" + config.stack_id, env=cdk.Environment(account='046086677675', region='eu-west-1'))
 
 # Create the S3 stack
-s3_stack = S3Stack(app, "S3Stack-" + stack_id, env=cdk.Environment(account='046086677675', region='eu-west-1'))
+s3_stack = S3Stack(app, "S3Stack-" + config.stack_id, env=cdk.Environment(account='046086677675', region='eu-west-1'))
 
 app.synth()
