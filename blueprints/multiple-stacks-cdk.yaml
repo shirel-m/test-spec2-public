@@ -22,7 +22,7 @@ grains:
       agent:
         name: '{{.inputs.agent_name}}'
       inputs:
-        - dev: '{"stack_id": {{sandboxId}}, "vpc_name": {{.inputs.vpc_name}}}'
+        - dev: '{"stack_id": "{{sandboxId}}", "vpc_name": "{{.inputs.vpc_name}}}"'
       outputs:
         - InstanceId
           
