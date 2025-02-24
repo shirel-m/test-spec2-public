@@ -22,5 +22,9 @@ grains:
         name: '{{.inputs.agent_name}}'
       outputs:
         - myFunctionUrlOutput
-      
+      workspace-directories:
+        - source:
+            store: 'MyRepo'
+            name: 'MY_REPO'
+            branch: 'main'
 
