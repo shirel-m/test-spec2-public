@@ -23,7 +23,6 @@ from application.development.backend_stack import BackEndStack
 
 app = cdk.App()
 #Creating the whole application based on Nested stacks
-ETLStack(app, "ETLStack")
 BackEndStack(app, "BackEndStack")
 
 app.synth()

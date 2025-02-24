@@ -32,20 +32,11 @@ class BackEndStack(Stack):
         #Using Nested stacks from Security and Networking teams
         network = VPCStack(self, "NetworkStackBackEnd", cidr='15.0.0.0/16', max_azs=1,)
         
-        #Defining first EC2 instance
+        #Defining EC2 instance
         ec2.Instance(self, "BackEndInstance1",
             vpc=network.vpc,
             instance_type=ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.SMALL),
             machine_image=ec2.AmazonLinuxImage()
-        )
-        
-        #Defining second EC2 instance
-        ec2.Instance(self, "BackEndInstance2",
-            vpc=network.vpc,
-            instance_type=ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.SMALL),
-            machine_image=ec2.AmazonLinuxImage(
-                generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX_2
-            )
         )
                 
 
