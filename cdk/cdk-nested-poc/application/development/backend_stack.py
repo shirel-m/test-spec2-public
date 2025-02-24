@@ -30,7 +30,7 @@ class BackEndStack(Stack):
         super().__init__(scope, id, **kwargs)        
         
         #Using Nested stacks from Security and Networking teams
-        network = VPCStack(self, "NetworkStackBackEnd", cidr='15.0.0.0/16', max_azs=1,)
+        network = VPCStack(self, "NetworkStackBackEnd", cidr='15.0.0.0/16', max_azs=1)
         
         #Defining EC2 instance
         ec2.Instance(self, "BackEndInstance1",

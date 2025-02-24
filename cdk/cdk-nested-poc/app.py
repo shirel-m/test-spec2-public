@@ -23,6 +23,6 @@ from application.development.backend_stack import BackEndStack
 
 app = cdk.App()
 #Creating the whole application based on Nested stacks
-BackEndStack(app, "BackEndStack")
+BackEndStack(app, "BackEndStack", env=cdk.Environment(account='046086677675', region='eu-west-1'))
 
 app.synth()
