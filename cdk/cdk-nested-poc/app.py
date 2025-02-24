@@ -18,7 +18,6 @@
 import os
 
 import aws_cdk as cdk
-from application.analytics.etl_stack import ETLStack
 from application.development.backend_stack import BackEndStack
 
 app = cdk.App()
