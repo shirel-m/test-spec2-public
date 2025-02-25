@@ -33,11 +33,11 @@ class BackEndStack(Stack):
         network = VPCStack(self, "NetworkStackBackEnd", cidr='15.0.0.0/16', max_azs=1)
         
         #Defining EC2 instance
-        ec2.Instance(self, "BackEndInstance1",
-            vpc=network.vpc,
-            instance_type=ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.SMALL),
-            machine_image=ec2.AmazonLinuxImage()
-        )
+        # ec2.Instance(self, "BackEndInstance1",
+        #     vpc=network.vpc,
+        #     instance_type=ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.SMALL),
+        #     machine_image=ec2.AmazonLinuxImage()
+        # )
                 
 
         
