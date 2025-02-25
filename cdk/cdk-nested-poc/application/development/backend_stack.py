@@ -15,12 +15,12 @@
 
 from aws_cdk import (
     aws_ec2 as ec2,
-    Stack
+    NestedStack
 )
 from constructs import Construct
 from application.networking.vpc_stack import VPCStack
 
-class BackEndStack(Stack):
+class BackEndStack(NestedStack):
     def __init__(
         self,
         scope: Construct,
