@@ -3,11 +3,6 @@ provider "google" {
   region      = var.region
 }
 
-resource "google_service_account" "default" {
-  account_id   = var.gsa_name
-  display_name = "GKE Workload Identity Service Account"
-}
-
 resource "google_compute_instance" "vm_instance" {
   name         = var.vm_name
   machine_type = var.machine_type
