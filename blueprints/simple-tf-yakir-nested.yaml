@@ -8,7 +8,7 @@ inputs:
 
 outputs:
   output:
-    value: '{{.grains.simple-tf-module.outputs.output2}}'    
+    value: '{{.grains.simple-tf-yakir.outputs.output2}}'    
     
 
 grains:
