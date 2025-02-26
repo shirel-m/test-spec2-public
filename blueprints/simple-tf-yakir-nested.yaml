@@ -1,0 +1,27 @@
+spec_version: 2-preview
+
+inputs:
+  compute_service_name:
+    type: agent
+  test_input2:
+    type: string
+
+outputs:
+  output:
+    value: '{{.grains.simple-tf-module.outputs.output2}}'    
+    
+
+grains:
+  simple-tf-module:
+    kind: blueprint
+    spec:
+      source:
+        path: blueprints
+        store: test-spec2-public
+      agent:        
+        name: '{{.inputs.compute_service_name}}'
+      inputs:
+        - test_input2: "{{.inputs.test_input2}}"
+        - compute_service_name: '{{inputs.tf-host-name}}'
+      outputs:
+        - output2
