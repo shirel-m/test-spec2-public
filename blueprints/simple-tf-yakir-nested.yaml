@@ -16,7 +16,7 @@ grains:
     kind: blueprint
     spec:
       source:
-        path: blueprints/simple-tf-yakir
+        path: blueprints/simple-tf-yakir.yaml
         store: test-spec2-public
       agent:        
         name: '{{.inputs.compute_service_name}}'
@@ -29,7 +29,7 @@ grains:
     kind: blueprint
     spec:
       source:
-        path: blueprints/simple-tf-yakir
+        path: blueprints/simple-tf-yakir.yaml
         store: test-spec2-public
       agent:        
         name: '{{.inputs.compute_service_name}}'
