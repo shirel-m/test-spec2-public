@@ -21,9 +21,9 @@ variable "vm_name" {
   default     = "example-vm"  # Default VM name
 }
 
-variable "service_account_name" {
-  type       = string
-  default    = "compute-engine-sa"
+variable "gsa_name" {
+  description = "The Google Service Account used for Workload Identity"
+  type        = string
 }
 
 variable "machine_type" {

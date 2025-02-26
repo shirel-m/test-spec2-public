@@ -4,8 +4,8 @@ provider "google" {
 }
 
 resource "google_service_account" "default" {
-  account_id   = var.service_account_name
-  display_name = "Custom SA for VM Instance"
+  email        = "${var.gsa_name}@${var.project_id}.iam.gserviceaccount.com"
+  scopes       = ["cloud-platform"]
 }
 
 resource "google_compute_instance" "vm_instance" {
