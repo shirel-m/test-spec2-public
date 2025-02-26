@@ -8,11 +8,24 @@ inputs:
 
 outputs:
   output:
-    value: '{{.grains.simple-tf-yakir.outputs.output2}}'    
+    value: '{{.grains.simple-tf-yakir-1.outputs.output2}}'    
     
 
 grains:
-  simple-tf-yakir:
+  simple-tf-yakir-1:
+    kind: blueprint
+    spec:
+      source:
+        path: blueprints
+        store: test-spec2-public
+      agent:        
+        name: '{{.inputs.compute_service_name}}'
+      inputs:
+        - test_input2: "{{.inputs.test_input2}}"
+        - compute_service_name: '{{inputs.compute_service_name}}'
+      outputs:
+        - output2
+  simple-tf-yakir-2:
     kind: blueprint
     spec:
       source:
