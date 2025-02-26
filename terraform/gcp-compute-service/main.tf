@@ -4,8 +4,8 @@ provider "google" {
 }
 
 resource "google_service_account" "default" {
-  email        = "${var.gsa_name}@${var.project_id}.iam.gserviceaccount.com"
-  scopes       = ["cloud-platform"]
+  account_id   = var.gsa_name
+  display_name = "GKE Workload Identity Service Account"
 }
 
 resource "google_compute_instance" "vm_instance" {
