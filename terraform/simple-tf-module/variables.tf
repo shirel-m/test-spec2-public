@@ -17,5 +17,3 @@ variable "test_input4" {
     description = "test input4 description"
     default = ""
 }
-
-#change
