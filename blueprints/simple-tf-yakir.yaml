@@ -37,3 +37,7 @@ grains:
         - test_input2: "{{.inputs.test_input2}}"
       outputs:
         - output2
+      tfvars-files:
+      - source:
+          store: test
+          path: terraform/simple-tf-module/values.tfvars
