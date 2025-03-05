@@ -16,7 +16,6 @@ class HelloCdkPythonStack(Stack):
         super().__init__(scope, construct_id, **kwargs)
 
         name = self.node.try_get_context("name")
-        print(name)
         my_function = _lambda.Function(
             self, "HelloWorldFunction",
             runtime=_lambda.Runtime.NODEJS_20_X,  # Provide any supported Node.js runtime
@@ -30,10 +29,7 @@ class HelloCdkPythonStack(Stack):
                   };
                 };
                 """
-            ),
-            environment ={
-                "NAME": name
-            }
+            )
         )
 
         my_function_url = my_function.add_function_url(
@@ -42,3 +38,4 @@ class HelloCdkPythonStack(Stack):
 
         # Define a CloudFormation output for your URL
         CfnOutput(self, "myFunctionUrlOutput", value=my_function_url.url)
+        CfnOutput(self, "name", value=name)

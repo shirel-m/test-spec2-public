@@ -22,6 +22,7 @@ grains:
         name: '{{.inputs.agent_name}}'
       outputs:
         - myFunctionUrlOutput
+        - name
       inputs:
         - name: 'Test'
 
