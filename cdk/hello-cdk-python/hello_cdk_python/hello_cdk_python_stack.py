@@ -16,6 +16,7 @@ class HelloCdkPythonStack(Stack):
         super().__init__(scope, construct_id, **kwargs)
 
         name = self.node.try_get_context("name")
+        print(name)
         my_function = _lambda.Function(
             self, "HelloWorldFunction",
             runtime=_lambda.Runtime.NODEJS_20_X,  # Provide any supported Node.js runtime
@@ -23,10 +24,9 @@ class HelloCdkPythonStack(Stack):
             code=_lambda.Code.from_inline(
                 """
                 exports.handler = async function(event) {
-                  const name = process.env.NAME;
                   return {
                     statusCode: 200,
-                    body: JSON.stringify('Hello ${name}'),
+                    body: JSON.stringify('Hello World'),
                   };
                 };
                 """
