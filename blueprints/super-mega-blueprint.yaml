@@ -1,0 +1,54 @@
+spec_version: 2
+description: a blueprint for testing as many features as possible
+
+
+inputs:
+  agent_name:
+    type: agent
+    description: must be k8s
+  sa_aws_access:
+    type: string
+    description: service account for terraform grains that create aws resources
+  generic_input:
+    type: string
+    default: nothing
+    description: an input for testing
+
+outputs:
+  sandbox_id:
+    value: '{{ sandboxId }}'
+    quick: false
+  generic_output:
+   value: '{{ .inputs.generic_input }}'
+   quick: false
+  terraform_output2:
+   value: '{{ .grains.tf-s3-bucket-object-writer.outputs.out_content }}'
+
+grains:
+  # - terraform grain for testing access from the cluster to the underlying AWS account via a service account
+  # - meant to create the fastest and cheapest AWS resources
+  # - allows to validate passed inputs by inspecting the object's content
+  # - allows to test resource tagging features (enabled for bucket and disabled for object)
+  tf-s3-bucket-object-writer:
+    kind: terraform
+    spec:
+      agent:
+        name: '{{ .inputs.agent_name }}'
+        service-account: '{{ .inputs.sa_aws_access }}'
+      source:
+        store: test-spec2-public
+        path: terraform/s3-bucket-object-writer
+      scripts: 
+        pre-tf-init:
+          source:
+            store: test-spec2-public
+            path : scripts/tfincluded.sh
+      inputs:
+        - bucket_name: '{{ sandboxId | downcase }}-bucket'
+        - object_name: '{{ sandboxId | downcase }}-object'
+        # a single comma separated string of key-value pairs, the newlines are replaced with spaces
+        - content: >-
+            sandbox_id={{ sandboxId }},
+            generic_input={{ .inputs.generic_input }}
+      outputs:
+        - out_content
