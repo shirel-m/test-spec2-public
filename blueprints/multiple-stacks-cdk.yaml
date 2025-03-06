@@ -18,13 +18,20 @@ grains:
     spec:
       source:
         path: cdk/cdk-multi-stack-app
-        store: test-spec2-public
+        store: qa_automation
       agent:
         name: '{{.inputs.agent_name}}'
       inputs:
         - stack_id: '{{sandboxId}}'
         - vpc_name: '{{.inputs.vpc_name}}}'
+      workspace-directories:
+        - source:
+            store: configuration_repo
+            name: CONFIG_REPO
+      env-vars:
+        - CONFIG_FILE_PATH: ${CONFIG_REPO}/configFile.json
       outputs:
         - InstanceId
+        - ConfigFile
           
 

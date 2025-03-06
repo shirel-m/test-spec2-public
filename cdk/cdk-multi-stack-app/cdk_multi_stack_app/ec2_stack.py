@@ -9,6 +9,7 @@ class Ec2Stack(Stack):
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
+        config_file = os.path.expandvars(os.environ['CONFIG_FILE_PATH'])
         vpc_name = self.node.try_get_context("vpc_name")
         # Create a VPC
         vpc = ec2.Vpc(self, vpc_name, max_azs=2)
@@ -27,3 +28,4 @@ class Ec2Stack(Stack):
 
         # Output the public IP of the EC2 instance
         CfnOutput(self, "InstanceId", value=instance.instance_id)
+        CfnOutput(self, "ConfigFile", value=config_file)
