@@ -6,13 +6,33 @@ inputs:
   agent_name:
     type: agent
     description: must be k8s
-  sa_aws_access:
+  cluster_namespace:
     type: string
-    description: service account for terraform grains that create aws resources
+    description: the namespace where the k8s-based grains (helm, k8s) will deploy their resources to
+  sa_cluster_access:
+    type: string
+    default: default
+    description: service account for helm and kubernetes grains
+  configmap_writer_release:
+    type: string
+    default: ''
+    description: the name of helm release
   generic_input:
     type: string
     default: nothing
     description: an input for testing
+  secret_input:
+    type: string
+    sensitive: true
+    description: secret input for testing
+  json_str:
+    type: string
+    default: nothing
+    description: escaped json
+  json_object:
+    type: string
+    default: nothing
+    description: json object
 
 outputs:
   sandbox_id:
@@ -21,34 +41,68 @@ outputs:
   generic_output:
    value: '{{ .inputs.generic_input }}'
    quick: false
-  terraform_output2:
-   value: '{{ .grains.tf-s3-bucket-object-writer.outputs.out_content }}'
+  terraform_output1:
+   value: '{{ .grains.tf-inputs-echo.outputs.out_number }}'
+   quick: true
 
 grains:
-  # - terraform grain for testing access from the cluster to the underlying AWS account via a service account
-  # - meant to create the fastest and cheapest AWS resources
-  # - allows to validate passed inputs by inspecting the object's content
-  # - allows to test resource tagging features (enabled for bucket and disabled for object)
-  tf-s3-bucket-object-writer:
+
+  # - fastest terraform grain: just outputs received inputs, doesn't need a provider
+  # - provides a way to test inputs and outputs
+  # - serves as a dependency for other grains (because fast and has outputs)
+  # - provides a way to test deployment on an agent without default service account (because doesn't need one)
+  tf-inputs-echo:
     kind: terraform
+    env-labels:
+      on-success:
+        - 'label1'
+        - test: 'label2'
+        - test1: '{{ .grains.tf-inputs-echo.outputs.out_string }}'
+        - '{{ .grains.tf-inputs-echo.outputs.out_string }}'
+      on-failure:
+        - result: 'test1'
     spec:
       agent:
         name: '{{ .inputs.agent_name }}'
-        service-account: '{{ .inputs.sa_aws_access }}'
+        # doesn't need a service-account
       source:
         store: test-spec2-public
-        path: terraform/s3-bucket-object-writer
-      scripts: 
-        pre-tf-init:
-          source:
-            store: test-spec2-public
-            path : scripts/tfincluded.sh
+        path: terraform/inputs-echo
       inputs:
-        - bucket_name: '{{ sandboxId | downcase }}-bucket'
-        - object_name: '{{ sandboxId | downcase }}-object'
+        - in_string: '{{ .inputs.generic_input }}'
+        - in_number: '8'
+        - in_bool: 'false'
+        - in_json_str: '{{ .inputs.json_str }}'
+        - in_json_object: '{{ .inputs.json_object }}'
+      outputs:
+        - out_string
+        - out_number
+        - out_bool
+        - out_json_str
+        - out_json_object
+
+  # - fastest helm grain + doesn't consume cluster's compute resources (no pods)
+  # - requires permissions to the cluster
+  # - tests the grain dependencies feature
+  # - allows to validate passed inputs by inspecting the configmap's data
+  # - meant to test usage of all possible context variables: sandboxId, inputs, grains (todo: add parameters)
+  # - allows to test resource tagging
+  helm-configmap-writer:
+    kind: helm
+    depends-on: tf-inputs-echo
+    spec:
+      agent:
+        name: '{{ .inputs.agent_name }}'
+        service-account: '{{ .inputs.sa_cluster_access }}'
+      source:
+        store: test-spec2-public
+        path: helm/configmap-writer
+      namespace: '{{ .inputs.cluster_namespace }}'
+      release: '{{ .inputs.configmap_writer_release }}'
+      inputs:
         # a single comma separated string of key-value pairs, the newlines are replaced with spaces
         - content: >-
             sandbox_id={{ sandboxId }},
-            generic_input={{ .inputs.generic_input }}
-      outputs:
-        - out_content
+            generic_input={{ .inputs.generic_input }},
+            secret_input={{ .inputs.secret_input }},
+            dep_grain_output={{ .grains.tf-inputs-echo.outputs.out_string }}
