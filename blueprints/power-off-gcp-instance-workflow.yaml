@@ -4,8 +4,7 @@ description: This workflow stops GCP instance
 workflow:
   scope: env_resource
   labels-selector: gcp
-  #resource-types: google_compute_instance
-  label-selector: google_compute_instance
+  resource-types: google_compute_instance
   triggers:
     - type: manual
 
