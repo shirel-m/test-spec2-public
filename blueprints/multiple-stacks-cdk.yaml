@@ -11,6 +11,8 @@ inputs:
 outputs:
   instance_id:
     value: '{{.grains.MultiStackCdk.outputs.InstanceId}}'
+  config_file_path:
+    value: '{{.grains.MultiStackCdk.outputs.ConfigFile}}'
 
 grains:
   MultiStackCdk:
